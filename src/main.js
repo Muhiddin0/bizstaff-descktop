@@ -1,10 +1,10 @@
-// main/main.js
-const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const log = require("electron-log");
+
+const { app, BrowserWindow, ipcMain } = require("electron");
 const { checkForUpdates } = require("./updater"); // Updater modulini import qilish
-const { APP_URL } = require("../env");
 const setupHandlers = require("./handlers"); // Agar handler'lar bo'lsa
+const { APP_URL } = require("../env"); // Agar handler'lar bo'lsa
 
 // Loglashni sozlash (ixtiyoriy lekin foydali)
 log.transports.file.level = "info";
@@ -15,7 +15,7 @@ log.info("App starting...");
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
-    title: "Bizstaff 2",
+    title: "Bizstaff",
     icon: path.join(__dirname, "../assets/512x512.png"),
     width: 1000, // O'lchamni o'zgartirishingiz mumkin
     height: 800,
@@ -30,7 +30,6 @@ function createWindow() {
   });
 
   // URL yuklash
-  log.info(`Loading URL: ${APP_URL}`);
   mainWindow.loadURL(APP_URL);
 
   // Oyna yopilganda ilovani yopishni to'xtatish

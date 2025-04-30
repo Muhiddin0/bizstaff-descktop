@@ -1,5 +1,3 @@
-// main/handlers.js yoki main/main.js ichida
-const { ipcMain } = require("electron");
 const { exec } = require("child_process"); // Node.js ning o'zidan
 const log = require("electron-log"); // Agar ishlatayotgan bo'lsangiz
 

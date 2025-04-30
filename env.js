@@ -1,6 +1,11 @@
-const dotenv = require("dotenv");
+const isDevelopement = require("./utils/is-dev");
 
-dotenv.config();
+const isDev = isDevelopement();
 
-const APP_URL = process.env.APP_URL || "http://localhost:3000";
-module.exports = { APP_URL };
+if (isDev) {
+  // Agar ishlatayotgan bo'lsangiz
+  module.exports = { APP_URL: "http://localhost:3000" };
+} else {
+  // Agar maxsus serverda ishlatayotgan bo'lsa
+  module.exports = { APP_URL: "https://seezntv.uz" };
+}
