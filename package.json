@@ -1,0 +1,65 @@
+{
+  "name": "bizstaff",
+  "description": "Bizstaff Electron desktop app",
+  "homepage": "https://github.com/muhiddin0/bizstaff-descktop",
+  "version": "1.0.1",
+  "main": "./main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win --linux"
+  },
+  "build": {
+    "appId": "bizstaff.uz",
+    "productName": "Bizstaff",
+    "files": [
+      "main/**/*",
+      "utils/**/*",
+      "preload/**/*",
+      "node_modules/**/*",
+      "package.json",
+      "assets/**/*",
+      ".env",
+      "env.js"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "./assets/icon.ico"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "icon": "./assets/icon.png",
+      "category": "Utility",
+      "maintainer": "Muhiddin Kabraliev kabraliev2005@gmail.com"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "muhiddin0",
+      "repo": "bizstaff-descktop"
+    }
+  },
+  "keywords": [
+    "electron"
+  ],
+  "author": {
+    "name": "Muhiddin Kabraliev",
+    "email": "kabraliev2005@gmail.com"
+  },
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^36.0.0",
+    "electron-builder": "^26.0.12"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "electron-log": "^5.3.4",
+    "electron-updater": "^6.6.2",
+    "os-utils": "^0.0.14"
+  }
+}
