@@ -7,5 +7,5 @@ if (isDev) {
   module.exports = { APP_URL: "http://localhost:3000" };
 } else {
   // Agar maxsus serverda ishlatayotgan bo'lsa
-  module.exports = { APP_URL: "https://seezntv.uz" };
+  module.exports = { APP_URL: "https://bizstaff-frontend.vercel.app" };
 }

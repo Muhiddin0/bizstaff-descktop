@@ -5,11 +5,14 @@ console.log("Preload script loaded.");
 
 // Faqat kerakli va xavfsiz funksiyalarni rendererga ochib berish
 contextBridge.exposeInMainWorld("electronAPI", {
+  // Yangi: Yangilanishni tekshirishni so'rash
+  checkForUpdates: () => ipcRenderer.send("check-for-updates"), // Asosiy jarayonga xabar yuborish
+
   // Asosiy jarayondan ma'lumot so'rash (invoke/handle uchun)
   getAppVersion: () => ipcRenderer.invoke("get-app-version"),
 
   // Yangilanishni qayta ishga tushirishni so'rash
-  requestUpdateRestart: () => ipcRenderer.send("restart-app-to-update"), // <<<--- YANGI QATOR
+  requestUpdateRestart: () => ipcRenderer.send("restart-app-to-update"),
 
   // Asosiy jarayonga xabar yuborish (send/on uchun)
   // Masalan: Foydalanuvchi "Update Later" tugmasini bossa
@@ -49,10 +52,3 @@ contextBridge.exposeInMainWorld("electronAPI", {
     return await ipcRenderer.invoke("show-update");
   },
 });
-
-// // Brauzer oynasi yuklanganda xabar berish (ixtiyoriy)
-// window.addEventListener("DOMContentLoaded", () => {
-//   console.log("DOM content loaded in renderer.");
-//   // Bu yerda boshlang'ich ma'lumotlarni so'rashingiz mumkin
-//   // Misol: window.electronAPI.getAppVersion().then(v => console.log('App Version:', v));
-// });

@@ -2,12 +2,12 @@
   "name": "bizstaff",
   "description": "Bizstaff Electron desktop app",
   "homepage": "https://github.com/muhiddin0/bizstaff-descktop",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "main": "./src/main.js",
   "scripts": {
-    "start": "NODE_ENV=development electron .",
+    "dev": "NODE_ENV=development electron .",
     "build": "NODE_ENV=production electron-builder --linux",
-    "build-all": "electron-builder --linux --win --mac"
+    "build-all": "electron-builder --linux --win"
   },
   "build": {
     "appId": "bizstaff.uz",
@@ -19,15 +19,19 @@
       "node_modules/**/*",
       "package.json",
       "assets/**/*",
-      ".env.production",
       "env.js"
     ],
     "directories": {
       "output": "dist"
     },
+    "win": {
+      "target": "nsis",
+      "icon": "./assets/icon.png"
+    },
     "linux": {
       "target": [
-        "AppImage"
+        "AppImage",
+        "deb"
       ],
       "icon": "./assets/icon.png",
       "category": "Utility",

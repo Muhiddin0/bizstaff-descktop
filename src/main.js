@@ -10,10 +10,8 @@ const { APP_URL } = require("../env"); // Agar handler'lar bo'lsa
 log.transports.file.level = "info";
 log.info("App starting...");
 
-// Xavfsizlik: Faqat ishonchli URL'larga ruxsat berish (agar kerak bo'lsa)
-// const ALLOWED_ORIGIN = 'https://sizning-domen.com';
-
 function createWindow() {
+  // Main window
   const mainWindow = new BrowserWindow({
     title: "Bizstaff",
     icon: path.join(__dirname, "../assets/512x512.png"),
@@ -33,6 +31,7 @@ function createWindow() {
   mainWindow.loadURL(APP_URL);
 
   // Oyna yopilganda ilovani yopishni to'xtatish
+  // Faqat production versionda
   /*
   mainWindow.on("close", (event) => {
     const choice = dialog.showMessageBoxSync(mainWindow, {
@@ -50,24 +49,18 @@ function createWindow() {
   */
 
   // Xavfsizlik: Faqat ma'lum URL'dan navigatsiyaga ruxsat berish (ixtiyoriy)
-  /*
-  mainWindow.webContents.on('will-navigate', (event, url) => {
-    if (!url.startsWith(ALLOWED_ORIGIN)) {
+  mainWindow.webContents.on("will-navigate", (event, url) => {
+    // Allow only APP_URL in env.js ;
+    if (!url.startsWith(APP_URL)) {
       log.warn(`Blocked navigation to: ${url}`);
       event.preventDefault();
     }
   });
-  */
 
   // Ishlab chiqish vositalarini (DevTools) ochish (ixtiyoriy)
   // if (process.env.NODE_ENV !== 'production') {
   //   mainWindow.webContents.openDevTools();
   // }
-
-  // Oyna tayyor bo'lgach yangilanishlarni tekshirishni boshlash
-  mainWindow.once("ready-to-show", () => {
-    checkForUpdates(mainWindow); // Updater funksiyasini chaqirish
-  });
 
   return mainWindow; // Oyna obyektini qaytarish
 }
@@ -76,6 +69,8 @@ app.whenReady().then(() => {
   const mainWindow = createWindow();
   // Agar handler'lar fayli bo'lsa, uni ishga tushirish
   setupHandlers(mainWindow);
+  // Updater funksiyasini chaqirish
+  checkForUpdates(mainWindow);
 
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) {
@@ -84,10 +79,25 @@ app.whenReady().then(() => {
   });
 });
 
+// Barcha oynalar yopilganda chiqishni to'xtatish
 app.on("window-all-closed", function () {
   if (process.platform !== "darwin") {
     app.quit();
   }
+});
+
+// Render jarayonidan kelgan "yangilanishni tekshir" so'rovini tinglash
+ipcMain.on("check-for-updates", () => {
+  console.log("Renderer requested update check.");
+  // Agar sozlamalar kerak bo'lsa (masalan, provider):
+  // autoUpdater.setFeedURL({ provider: 'github', owner: 'your-gh-username', repo: 'your-repo-name' });
+  mainWindow.webContents.send(
+    "update-message",
+    "Yangilanishlar tekshirilmoqda..."
+  );
+  autoUpdater.checkForUpdates(); // Tekshirishni boshlash
+  // Yoki bildirishnoma bilan tekshirish:
+  // autoUpdater.checkForUpdatesAndNotify();
 });
 
 // --- IPC Handler misoli (handlers.js ga ko'chirilishi mumkin) ---
@@ -98,12 +108,6 @@ ipcMain.handle("get-app-version", () => {
 });
 
 // Yangilanishni o'rnatish uchun renderer'dan kelgan so'rovni qabul qilish
-ipcMain.on("restart-app-to-update", () => {
-  log.info("IPC: restart-app-to-update received. Quitting and installing...");
-  const { autoUpdater } = require("electron-updater");
-  autoUpdater.quitAndInstall();
-});
-
 ipcMain.on("restart-app-to-update", () => {
   log.info("IPC: restart-app-to-update received. Quitting and installing...");
   const { autoUpdater } = require("electron-updater");

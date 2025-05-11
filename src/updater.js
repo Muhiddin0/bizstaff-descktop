@@ -5,7 +5,7 @@ const { dialog } = require("electron");
 
 // Updater loglarini sozlash
 autoUpdater.logger = log;
-autoUpdater.logger.transports.file.level = "info";
+autoUpdater.logger.transports.file.level = "debug";
 
 let mainWindow; // Asosiy oynaga havola
 
